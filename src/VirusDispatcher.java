@@ -30,7 +30,7 @@ public class VirusDispatcher extends RouteBuilder {
              .log("MERS - ${body}")
              .to("knative:channel/noval-handler")
           .otherwise()
-             .setBody().constant("{\"type\":\"Virus\", \"genuses\":\"Unknown\"}")
+             .setBody().constant("{\"type\":\"Virus\", \"genuses\":\"Virose\"}")
              .to("knative:channel/unknown-handler")
         
     .end();
