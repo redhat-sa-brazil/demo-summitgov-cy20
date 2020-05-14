@@ -14,7 +14,7 @@ public class SimulateSender extends RouteBuilder {
     jacksonDataFormat.setUnmarshalType(SingalInput.class);
     
 
-    from("timer:tick?fixedRate=true&period=2000")
+    from("timer:tick?fixedRate=true&period=5s")
       .setBody(method(this, "genRandoSingalInput()"))
       .marshal(jacksonDataFormat)
       .setHeader("CE-Type", constant("dev.knative.humancontact"))

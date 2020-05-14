@@ -18,7 +18,7 @@ function updateStatus (symbol) {
   const iconEl = document.getElementById('status-icon')
   const textEl = document.getElementById('status-text')
 
-  textEl.innerHTML = `Status: ${symbol === STATUS.CONNECTED ? 'Connected' : 'Not Connected'}`
+  textEl.innerHTML = `Status: ${symbol === STATUS.CONNECTED ? 'Conectado!' : 'Desconectado!'}`
   iconEl.innerHTML = symbol
 
   if (symbol === STATUS.CONNECTED) {
