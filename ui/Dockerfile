@@ -1,5 +1,5 @@
-FROM node:10
-ENV MYUI_USER myuiuser
+FROM node:12
+
 
 COPY package*.json ./
 
@@ -15,7 +15,7 @@ RUN npm prune --production
 
 EXPOSE 8080
 
-USER ${MYUI_USER}
+USER 1001
 
 CMD [ "npm", "start" ]
 
