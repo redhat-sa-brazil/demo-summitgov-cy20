@@ -201,3 +201,4 @@ kamel run -d camel-jackson NovalHandler.java
 ```
 
 - Go to Dashboard to see the new COVID 19 virus appears
+-
