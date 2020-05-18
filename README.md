@@ -30,7 +30,6 @@ operadores)
 Instalar os Operadores
 
 1. OpenShift Serverless Operator
-1. Knative Eventing Operator
 1. AMQ Streams
 1. Camel K
 
@@ -129,27 +128,27 @@ spec: {}
 ```
 
 
-## Install applications
+## Instalar aplicativos
 
-Setup Dashboard
+Painel de configuração
 
 ```
-oc new-app quay.io/weimeilin79/myui:latest
+oc new-app quay.io/gedasilv/myui
 oc expose service myui
 ```
 
-Get your Dashboad location
+Obtenha a localização do seu dashboard
 
 ```
 oc get route
 ```
 
 
-### Setup application
+### Configuração do aplicativo
 
-#### Existing virus outbreak handler
+#### Manipulador de surto de vírus existente
 
-- Setup Channel, under src/channel
+- Canal de instalação, em src/channel
 
 ```
 oc create -f channelalpha.yaml		
@@ -158,7 +157,7 @@ oc create -f channelunknown.yaml
 oc create -f channelnoval.yaml		
 ```
 
-- Install the existing virus outbreak handler, under src/handlers
+- Instale o manipulador de surtos de vírus existente, em src/handlers
 
 ```
 kamel run -d camel-jackson AlphaHandler.java
@@ -167,31 +166,31 @@ kamel run -d camel-jackson UnknownHandler.groovy
 ```
 
 
-- Start sending in lab result, under src/simulator
+- Comece a enviar o resultado do laboratório, em src/simulator
 
 ```
 kamel run -d camel-jackson -d camel-bean SimulateSender.java 
 kamel run Dashboard.java
 ```
 
-- Start dispatching virus result to handlers, under src/
+- Comece a despachar o resultado do vírus para os manipuladores, em src/
 
 ```
 kamel run -d camel-jackson VirusDispatcher.java --dev
 ```
 
-- Go to Dashboard to see the virus
+- Acesse o Painel para ver o vírus
 
 
-#### Adding COVID-19 handler
+#### Adicionando manipulador COVID-19
 
-- Install the new COVID19 outbreak handler, under src/handlers
+- Instale o novo manipulador de surtos COVID19, em src/handlers
 
 ```
 kamel run -d camel-jackson NovalHandler.java
 ```
 
-- Update your VirusDispatcher.java under src/ add the following condition ***(You should be using DEV mode)***
+- Atualize seu VirusDispatcher.java em src / adicione a seguinte condição ***(Você deveria estar usando o modo DEV)***
 
 ```
 	      .when().simple("${body.genuses} == 'Novalvirus'")
@@ -200,5 +199,5 @@ kamel run -d camel-jackson NovalHandler.java
              .to("knative:channel/noval-handler")
 ```
 
-- Go to Dashboard to see the new COVID 19 virus appears
+- Vá para o Painel para ver o novo vírus COVID 19 aparece
 -
