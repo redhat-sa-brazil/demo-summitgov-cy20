@@ -134,7 +134,7 @@ apiVersion: camel.apache.org/v1
 kind: IntegrationPlatform
 metadata:
   name: example
-  namespace: outbreak
+  namespace: demo-saude-digital
 spec: {}
 ```
 
