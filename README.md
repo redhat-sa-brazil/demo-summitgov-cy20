@@ -3,7 +3,7 @@
 ![](Outbreak.png)
 
 
-## Folder Structure
+## Estrutura de pastas
 
 ```
 --Setup
