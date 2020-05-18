@@ -1,0 +1,8 @@
+resources:
+- namespaces.yaml
+- services.yaml
+- openshift-routes.yaml
+- deployments.yaml
+- camel-k-integration-platforms.yaml
+- camel-k-channels.yaml
+- camel-k-integrations.yaml

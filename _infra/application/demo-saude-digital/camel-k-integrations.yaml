@@ -1,0 +1,217 @@
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: alpha-handler
+  namespace: demo-saude-digital
+spec:
+  dependencies:
+    - 'camel:jackson'
+  sources:
+    - content: |
+        import org.apache.camel.builder.RouteBuilder;
+
+        //kamel run -d camel-jackson AlphaHandler.java --dev
+
+        public class AlphaHandler extends RouteBuilder {
+          
+          @Override
+          public void configure() throws Exception {
+
+            from("knative:channel/alpha-handler")
+            .log("Alpha Events - ${body}")
+            .to("kafka:my-topic?brokers=my-cluster-kafka-bootstrap.demo-saude-digital-streams.svc:9092");
+          }
+
+          
+        }
+      name: AlphaHandler.java
+---
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: mers-handler
+  namespace: demo-saude-digital
+spec:
+  dependencies:
+    - 'camel:jackson'
+  sources:
+    - content: |
+        - from:
+            uri: knative:channel/mers-handler
+            steps:
+              - to: "log:info"
+              - to: "kafka:my-topic?brokers=my-cluster-kafka-bootstrap.demo-saude-digital-streams.svc:9092"
+      name: MersHandler.yaml
+---
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: simulate-sender
+  namespace: demo-saude-digital
+spec:
+  dependencies:
+    - 'camel:jackson'
+    - 'camel:bean'
+  sources:
+    - content: |
+        import org.apache.camel.builder.RouteBuilder;
+        import org.apache.camel.component.jackson.JacksonDataFormat;
+        import java.util.Random;
+
+        //kamel run -d camel-jackson -d camel-bean SimulateSender.java --dev
+
+        public class SimulateSender extends RouteBuilder {
+
+          //Teste de anotação
+          
+          @Override
+          public void configure() throws Exception {
+
+            JacksonDataFormat jacksonDataFormat = new JacksonDataFormat();
+            jacksonDataFormat.setUnmarshalType(SingalInput.class);
+            
+
+            from("timer:tick?fixedRate=true&period=2000")
+              .setBody(method(this, "genRandoSingalInput()"))
+              .marshal(jacksonDataFormat)
+              .setHeader("CE-Type", constant("dev.knative.humancontact"))
+              .log("${body}")
+              .to("knative:endpoint/virus-dispatcher");
+          }
+
+          public static SingalInput genRandoSingalInput(){
+
+              SingalInput input = new SingalInput();
+              Random generator = new Random();
+              String[] genuses = {"Alphacoronavirus","Betacoronavirus","MERSvirus","Novalvirus"};
+              //
+              int randomIndex = generator.nextInt(genuses.length);
+
+              input.setType("Virus");
+              input.setGenuses(genuses[randomIndex]);
+               
+              return input;
+          }
+
+          public static class SingalInput {
+
+            String type;
+            String genuses;
+
+            public String getType(){
+              return genuses;
+            }
+            public String getGenuses(){
+              return genuses;
+            }
+
+            public void setType(String type){
+              this.type = type;
+            }
+
+            public void setGenuses(String genuses){
+              this.genuses = genuses;
+            }
+
+            @Override
+            public String toString(){
+                return "Type:["+type+"] Genuses:["+genuses+"]";
+            }
+          }
+        }
+      name: SimulateSender.java
+---
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: unknown-handler
+  namespace: demo-saude-digital
+spec:
+  dependencies:
+    - 'camel:jackson'
+  sources:
+    - content: >
+        from("knative:channel/unknown-handler")
+
+        .to('log:info?showAll=false')
+
+        .to('kafka:my-topic?brokers=my-cluster-kafka-bootstrap.demo-saude-digital-streams.svc:9092')
+      name: UnknownHandler.groovy
+---
+apiVersion: camel.apache.org/v1
+kind: Integration
+metadata:
+  name: virus-dispatcher
+  namespace: demo-saude-digital
+spec:
+  dependencies:
+    - 'camel:jackson'
+  sources:
+    - content: |
+        import org.apache.camel.builder.RouteBuilder;
+        import org.apache.camel.component.jackson.JacksonDataFormat;
+
+        //kamel run -d camel-jackson VirusDispatcher.java --dev
+
+        public class VirusDispatcher extends RouteBuilder {
+
+          
+          @Override
+          public void configure() throws Exception {
+
+            JacksonDataFormat jacksonDataFormat = new JacksonDataFormat();
+            jacksonDataFormat.setUnmarshalType(SingalInput.class);
+            
+
+            from("knative:endpoint/humancontact")
+            .unmarshal(jacksonDataFormat)
+            .filter(simple("${header.CE-Type} == 'dev.knative.humancontact'"))
+                .choice()
+                  .when().simple("${body.genuses} == 'Alphacoronavirus'")
+                    .marshal(jacksonDataFormat)
+                    .log("Alpha ${body}")
+                    .to("knative:channel/alpha-handler")
+                  .when().simple("${body.genuses} == 'MERSvirus'")
+                     .marshal(jacksonDataFormat)
+                     .log("MERS - ${body}")
+                     .to("knative:channel/mers-handler")
+                  .when().simple("${body.genuses} == 'Novalvirus'")
+                     .marshal(jacksonDataFormat)
+                     .log("MERS - ${body}")
+                     .to("knative:channel/noval-handler")
+                  .otherwise()
+                     .setBody().constant("{\"type\":\"Virus\", \"genuses\":\"Sem Classificação\"}")
+                     .to("knative:channel/unknown-handler")
+                
+            .end();
+          }
+
+          public static class SingalInput {
+
+            String type;
+            String genuses;
+
+            public String getType(){
+              return type;
+            }
+            public String getGenuses(){
+              return genuses;
+            }
+
+            public void setType(String type){
+              this.type = type;
+            }
+
+            public void setGenuses(String genuses){
+              this.genuses = genuses;
+            }
+
+            @Override
+            public String toString(){
+                return "Type:["+type+"] Genuses:["+genuses+"]";
+            }
+          }
+
+          
+        }
+      name: VirusDispatcher.java

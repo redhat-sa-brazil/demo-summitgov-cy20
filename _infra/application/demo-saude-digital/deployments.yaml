@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: muyi
+  namespace: demo-saude-digital
+  labels:
+    app: myui
+    app.kubernetes.io/component: myui
+    app.kubernetes.io/instance: myui
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: myui
+  template:
+    metadata:
+      labels:
+        app: myui
+        app.kubernetes.io/component: myui
+        app.kubernetes.io/instance: myui
+    spec:
+      containers:
+        - name: myui
+          image: 'quay.io/gedasilv/myui'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8181
+              protocol: TCP
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: saude-digital-dashboard
+  namespace: demo-saude-digital
+  labels:
+    app: saude-digital-dashboard
+    app.kubernetes.io/component: saude-digital-dashboard
+    app.kubernetes.io/instance: saude-digital-dashboard
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: saude-digital-dashboard
+  template:
+    metadata:
+      labels:
+        app: saude-digital-dashboard
+        app.kubernetes.io/component: saude-digital-dashboard
+        app.kubernetes.io/instance: saude-digital-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: 'quay.io/gedasilv/saude-digital-dashboard'
