@@ -47,29 +47,44 @@ Crie o cluster do Kafka Cluster no projeto de fluxos
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
+  creationTimestamp: '2020-05-18T10:56:50Z'
+  generation: 1
   name: my-cluster
-  namespace: streams
+  namespace: demo-saude-digital-streams
+  resourceVersion: '1068779'
+  selfLink: >-
+    /apis/kafka.strimzi.io/v1beta1/namespaces/demo-saude-digital-streams/kafkas/my-cluster
+  uid: 52a0bb1c-ab61-4c64-afce-5a45642b2d83
 spec:
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
   kafka:
-    version: 2.3.0
-    replicas: 3
+    config:
+      log.message.format.version: '2.4'
+      offsets.topic.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      transaction.state.log.replication.factor: 3
     listeners:
       plain: {}
       tls: {}
-    config:
-      offsets.topic.replication.factor: 3
-      transaction.state.log.replication.factor: 3
-      transaction.state.log.min.isr: 2
-      log.message.format.version: '2.3'
+    replicas: 3
     storage:
       type: ephemeral
+    version: 2.4.0
   zookeeper:
     replicas: 3
     storage:
       type: ephemeral
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}
+status:
+  conditions:
+    - lastTransitionTime: '2020-05-18T10:56:51+0000'
+      message: Kafka cluster is being deployed
+      reason: Creating
+      status: 'True'
+      type: NotReady
+  observedGeneration: 0
+
 
 ```
 
@@ -82,7 +97,7 @@ metadata:
   name: my-topic
   labels:
     strimzi.io/cluster: my-cluster
-  namespace: streams
+  namespace: demo-saude-digital-streams
 spec:
   partitions: 10
   replicas: 3
