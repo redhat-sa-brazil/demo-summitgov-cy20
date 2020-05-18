@@ -6,25 +6,41 @@
 ## Estrutura de pastas
 
 ```
---Setup
--- src
-	|--VirusDispatcher	(Despachar o resultado do laboratório para os manipuladores pelo Channel)
-	|--channel (Canal Knative para receber eventos)
-		|--Alpha
-		|--Mers
-		|--Unknown
-		|--Noval (COVID-19)
-	|--handlers (Manipuladores que enviam aviso ao Painel por eventos do canal)
-		|--Alpha
-		|--Mers
-		|--Unknown
-		|--Noval (COVID-19)
-	|--Simulator
-		|--SimulatorSend (Enviar dados de laboratório falsos)
-		|--Dashboard (Enviar notificação para o Painel)
-		|--SimulatorCloudEvent (RC 1- Problema com dois Camel K
-operadores)
--- ui
+--_infra
+  |--demo-saude-digital
+    |--camel-k-channels.yaml
+    |--camel-k-integration-plataforms.yaml
+    |--camel-k-integrations.yaml
+    |--deployments.yaml
+    |--kustomization.yaml
+    |--nasmespaces.yaml
+    |--openshift-routes.yaml
+    |--services.yaml
+  |--demo-saude-digital-streams
+    |--kafka-clusters.yaml
+    |--kafka-topics.yaml
+    |--kustomization.yaml
+    |--namespaces.yaml
+-- components
+  |--routes
+    |--VirusDispatcher	(Despachar o resultado do laboratório para os manipuladores pelo Channel)
+	  |--channel (Canal Knative para receber eventos)
+		  |--Alpha
+		  |--Mers
+		  |--Unknown
+		  |--Noval (COVID-19)
+	  |--handlers (Manipuladores que enviam aviso ao Painel por eventos do canal)
+		  |--Alpha
+		  |--Mers
+		  |--Unknown
+		  |--Noval (COVID-19)
+	  |--Simulator
+		  |--SimulatorSend (Enviar dados de laboratório falsos)
+		  |--Dashboard (Enviar notificação para o Painel)
+		  |--SimulatorCloudEvent (RC 1- Problema com dois Camel K operadores)
+  |-- ui
+  |--dashboard
+    
 ```
 ## Ambiente base de instalação
 Instalar os Operadores
