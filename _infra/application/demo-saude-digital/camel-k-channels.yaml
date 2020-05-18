@@ -1,0 +1,29 @@
+apiVersion: messaging.knative.dev/v1alpha1
+kind: InMemoryChannel
+metadata:
+  name: alpha-handler
+  namespace: demo-saude-digital
+---
+apiVersion: messaging.knative.dev/v1alpha1
+kind: InMemoryChannel
+metadata:
+  name: humancontact
+  namespace: demo-saude-digital
+---
+apiVersion: messaging.knative.dev/v1alpha1
+kind: InMemoryChannel
+metadata:
+  name: mers-handler
+  namespace: demo-saude-digital
+---
+apiVersion: messaging.knative.dev/v1alpha1
+kind: InMemoryChannel
+metadata:
+  name: noval-handler
+  namespace: demo-saude-digital
+---
+apiVersion: messaging.knative.dev/v1alpha1
+kind: InMemoryChannel
+metadata:
+  name: unknown-handler
+  namespace: demo-saude-digital

@@ -1,0 +1,4 @@
+resources:
+- namespaces.yaml
+- kafka-clusters.yaml
+- kafka-topics.yaml

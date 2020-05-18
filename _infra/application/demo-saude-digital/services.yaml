@@ -1,0 +1,41 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: myui
+  namespace: demo-saude-digital
+  labels:
+    app: myui
+    app.kubernetes.io/component: myui
+    app.kubernetes.io/instance: myui
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: 8181-tcp
+      protocol: TCP
+      port: 8181
+      targetPort: 8181
+  selector:
+    app: myui
+  type: ClusterIP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: saude-digital-dashboard
+  namespace: demo-saude-digital
+  labels:
+    app: saude-digital-dashboard
+    app.kubernetes.io/component: saude-digital-dashboard
+    app.kubernetes.io/instance: saude-digital-dashboard
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: saude-digital-dashboard
+  type: ClusterIP

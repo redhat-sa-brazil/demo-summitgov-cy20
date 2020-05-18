@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: myui
+  namespace: demo-saude-digital
+  labels:
+    app: myui
+    app.kubernetes.io/component: myui
+    app.kubernetes.io/instance: myui
+  annotations:
+    openshift.io/host.generated: 'true'
+spec:
+  to:
+    kind: Service
+    name: myui
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  wildcardPolicy: None
