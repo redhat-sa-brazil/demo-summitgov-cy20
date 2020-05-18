@@ -109,25 +109,21 @@ spec:
 
 E também crie o Serviço Knative, se não existir.
 ```
-apiVersion: v1
-kind: Namespace
-metadata:
- name: knative-serving
-```
-
-```
-apiVersion: serving.knative.dev/v1alpha1
+apiVersion: operator.knative.dev/v1alpha1
 kind: KnativeServing
 metadata:
- name: knative-serving
- namespace: knative-serving
-                              
+  name: knative-serving
+  namespace: knative-serving
+spec: {}
+
 ```
+
+
 
 Criar espaço para nome para a demonstração
 
 ```
-oc new-project outbreak
+oc new-project demo-saude-digital
 
 ```
 
