@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: hub-repos
+  name: demo-saude-digital-streams-repos
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   name: github-redhat-sa-brazil-demo-summitgov-cy20
-  namespace: hub-repos
+  namespace: demo-saude-digital-streams-repos
 spec:
   type: GitHub
   pathname: https://github.com/redhat-sa-brazil/demo-summitgov-cy20.git
@@ -43,7 +43,7 @@ metadata:
     apps.open-cluster-management.io/github-path: resources/application/demo-saude-digital-streams
     apps.open-cluster-management.io/github-branch: master
 spec:
-  channel: hub-repos/github-redhat-sa-brazil-demo-summitgov-cy20
+  channel: demo-saude-digital-streams-repos/github-redhat-sa-brazil-demo-summitgov-cy20
   placement:
     placementRef:
       kind: PlacementRule
