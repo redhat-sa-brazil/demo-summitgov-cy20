@@ -24,3 +24,6 @@ hs_err_pid*
 
 # editors
 .vscode
+
+# MacOS X temp
+.DS_Store
