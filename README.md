@@ -29,15 +29,15 @@
 -- components
   |--routes
     |--VirusDispatcher	(Despachar o resultado do laboratório para os manipuladores pelo Channel)
-	  |--handlers (Manipuladores que enviam aviso ao Painel por eventos do canal)
-		  |--Alpha
-		  |--Mers
-		  |--Unknown
-		  |--Noval (COVID-19)
-	  |--Simulator
-		  |--SimulatorSend (Enviar dados de laboratório falsos)
-		  |--Dashboard (Enviar notificação para o Painel)
-		  |--SimulatorCloudEvent (RC 1- Problema com dois Camel K operadores)
+    |--handlers (Manipuladores que enviam aviso ao Painel por eventos do canal)
+      |--Alpha
+      |--Mers
+      |--Unknown
+      |--Noval (COVID-19)
+    |--Simulator
+      |--SimulatorSend (Enviar dados de laboratório falsos)
+      |--Dashboard (Enviar notificação para o Painel)
+      |--SimulatorCloudEvent (RC 1- Problema com dois Camel K operadores)
   |--ui
   |--dashboard
     
