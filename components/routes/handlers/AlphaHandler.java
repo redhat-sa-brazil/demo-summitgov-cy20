@@ -9,7 +9,7 @@ public class AlphaHandler extends RouteBuilder {
 
     from("knative:channel/alpha-handler")
     .log("Alpha Events - ${body}")
-    .to("kafka:my-topic?brokers=my-cluster-kafka-bootstrap.results-streams.svc:9092");
+    .to("kafka:my-topic?brokers=my-cluster-kafka-bootstrap.demo-saude-digital-streams.svc:9092");
   }
 
   
