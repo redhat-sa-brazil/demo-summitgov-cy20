@@ -1,0 +1,8 @@
+# Default owners
+*              @germanoaraujo @davivcgarcia
+
+# Application code
+components/*   @germanoaraujo
+
+# Infraestructure code
+resources/*    @davivcgarcia
