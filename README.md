@@ -1,26 +1,31 @@
-# Corona Virus Demo 
+# demo-summitgov-cy20
 
-![](Outbreak.png)
+![](diagram.png)
 
-
-## Estrutura de pastas
+## Estrutura de Diretórios
 
 ```
 --_infra
-  |--demo-saude-digital
-    |--camel-k-channels.yaml
-    |--camel-k-integration-plataforms.yaml
-    |--camel-k-integrations.yaml
-    |--deployments.yaml
-    |--kustomization.yaml
-    |--nasmespaces.yaml
-    |--openshift-routes.yaml
-    |--services.yaml
-  |--demo-saude-digital-streams
-    |--kafka-clusters.yaml
-    |--kafka-topics.yaml
-    |--kustomization.yaml
-    |--namespaces.yaml
+  |--application (Objetos K8S)  
+    |--demo-saude-digital
+      |--camel-k-channels.yaml
+      |--camel-k-integration-plataforms.yaml
+      |--camel-k-integrations.yaml
+      |--deployments.yaml
+      |--kustomization.yaml
+      |--nasmespaces.yaml
+      |--openshift-routes.yaml
+      |--services.yaml
+    |--demo-saude-digital-streams
+      |--kafka-clusters.yaml
+      |--kafka-topics.yaml
+      |--kustomization.yaml
+      |--namespaces.yaml
+  |--multicluster (Objetos ACM)
+    |--demo-saude-digital
+      |--demo-saude-digital.yaml
+    |--demo-saude-digital-streams
+      |--demo-saude-digital-streams.yaml
 -- components
   |--routes
     |--VirusDispatcher	(Despachar o resultado do laboratório para os manipuladores pelo Channel)
@@ -38,26 +43,46 @@
 		  |--SimulatorSend (Enviar dados de laboratório falsos)
 		  |--Dashboard (Enviar notificação para o Painel)
 		  |--SimulatorCloudEvent (RC 1- Problema com dois Camel K operadores)
-  |-- ui
+  |--ui
   |--dashboard
     
 ```
-## Ambiente base de instalação
-Instalar os Operadores
 
-1. OpenShift Serverless Operator
-1. AMQ Streams
-1. Camel K
+## Pré-requisitos
+
+O ambiente deve ter os seguintes operators habilitados e devidamente configurados:
+
+1. Knative Serving + Eventing (OpenShift Serverless)
+1. Strimzi (AMQ Streams)
+1. Camel-K
 
 
-Criar projeto para configurar fluxos AMQ (Kafka)
+## Instalação
+
+Você pode implantar essa demonstração de forma automatizada ou manual.
+
+### Automatizado
+
+```
+$ git clone https://github.com/redhat-sa-brazil/demo-summitgov-cy20.git
+$ cd demo-summitgov-cy20
+$ kubectl apply -k _infra/application/demo-saude-digital-streams
+$ kubectl apply -k _infra/application/demo-saude-digital
+
+```
+
+### Manual
+
+#### Instalar dependências
+
+1. Criar projeto para configurar fluxos AMQ (Kafka)
 
 ```
 oc new-project streams
 
 ```
 
-Crie o cluster do Kafka Cluster no projeto de fluxos
+2. Crie o cluster do Kafka Cluster no projeto de fluxos
 
 ```
 apiVersion: kafka.strimzi.io/v1beta1
@@ -100,11 +125,9 @@ status:
       status: 'True'
       type: NotReady
   observedGeneration: 0
-
-
 ```
 
-E também crie o Tópico Kafka
+3. E também crie o Tópico Kafka
 
 ```
 apiVersion: kafka.strimzi.io/v1beta1
@@ -120,30 +143,16 @@ spec:
   config:
     retention.ms: 604800000
     segment.bytes: 1073741824
-
 ```
 
-E também crie o Serviço Knative, se não existir.
-```
-apiVersion: operator.knative.dev/v1alpha1
-kind: KnativeServing
-metadata:
-  name: knative-serving
-  namespace: knative-serving
-spec: {}
-
-```
-
-
-
-Criar espaço para nome para a demonstração
+4. Criar espaço para nome para a demonstração
 
 ```
 oc new-project demo-saude-digital
 
 ```
 
-Create Camel K Integration Platform
+5. Create Camel K Integration Platform
 
 ```
 apiVersion: camel.apache.org/v1
@@ -155,7 +164,7 @@ spec: {}
 ```
 
 
-## Instalar aplicativos
+#### Instalar aplicativos
 
 Painel de configuração
 
@@ -171,9 +180,9 @@ oc get route
 ```
 
 
-### Configuração do aplicativo
+#### Configuração do aplicativo
 
-#### Manipulador de surto de vírus existente
+##### Manipulador de surto de vírus existente
 
 - Canal de instalação, em src/channel
 
@@ -209,7 +218,7 @@ kamel run -d camel-jackson VirusDispatcher.java --dev
 - Acesse o Painel para ver o vírus
 
 
-#### Adicionando manipulador COVID-19
+##### Adicionando manipulador COVID-19
 
 - Instale o novo manipulador de surtos COVID19, em src/handlers
 
@@ -225,6 +234,3 @@ kamel run -d camel-jackson NovalHandler.java
              .log("MERS - ${body}")
              .to("knative:channel/noval-handler")
 ```
-
-- Vá para o Painel para ver o novo vírus COVID 19 aparece
--
