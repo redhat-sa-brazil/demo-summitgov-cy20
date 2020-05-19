@@ -15,17 +15,17 @@ spec:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: demo-saude-digital-streams
+  name: demo-saude-digital
   labels:
-    app: demo-saude-digital-streams
+    app: demo-saude-digital
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: demo-saude-digital-streams
-  namespace: demo-saude-digital-streams
+  name: demo-saude-digital
+  namespace: demo-saude-digital
   labels:
-    app: demo-saude-digital-streams
+    app: demo-saude-digital
 spec:
   clusterSelector:
     matchLabels:
@@ -35,27 +35,27 @@ spec:
 apiVersion: apps.open-cluster-management.io/v1
 kind: Subscription
 metadata:
-  name: demo-saude-digital-streams
-  namespace: demo-saude-digital-streams
+  name: demo-saude-digital
+  namespace: demo-saude-digital
   labels:
-    app: demo-saude-digital-streams
+    app: demo-saude-digital
   annotations:
-    apps.open-cluster-management.io/github-path: _infra/application/demo-saude-digital-streams
+    apps.open-cluster-management.io/github-path: resources/application/demo-saude-digital
     apps.open-cluster-management.io/github-branch: master
 spec:
   channel: hub-repos/github-redhat-sa-brazil-demo-summitgov-cy20
   placement:
     placementRef:
       kind: PlacementRule
-      name: demo-saude-digital-streams
+      name: demo-saude-digital
 ---
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  name: demo-saude-digital-streams
-  namespace: demo-saude-digital-streams
+  name: demo-saude-digital
+  namespace: demo-saude-digital
   labels:
-    app: demo-saude-digital-streams
+    app: demo-saude-digital
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -66,4 +66,4 @@ spec:
     - key: app
       operator: In
       values:
-      - demo-saude-digital-streams
+      - demo-saude-digital

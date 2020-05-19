@@ -5,8 +5,8 @@
 ## Estrutura de Diretórios
 
 ```
---_infra
-  |--application (Objetos K8S)  
+--resources (Objetos K8S)   
+  |--application (Aplicação)  
     |--demo-saude-digital
       |--camel-k-channels.yaml
       |--camel-k-integration-plataforms.yaml
@@ -21,7 +21,7 @@
       |--kafka-topics.yaml
       |--kustomization.yaml
       |--namespaces.yaml
-  |--multicluster (Objetos ACM)
+  |--multicluster (Advanced Cluster Management)
     |--demo-saude-digital
       |--demo-saude-digital.yaml
     |--demo-saude-digital-streams
@@ -29,11 +29,6 @@
 -- components
   |--routes
     |--VirusDispatcher	(Despachar o resultado do laboratório para os manipuladores pelo Channel)
-	  |--channel (Canal Knative para receber eventos)
-		  |--Alpha
-		  |--Mers
-		  |--Unknown
-		  |--Noval (COVID-19)
 	  |--handlers (Manipuladores que enviam aviso ao Painel por eventos do canal)
 		  |--Alpha
 		  |--Mers
@@ -66,8 +61,8 @@ Você pode implantar essa demonstração de forma automatizada ou manual.
 ```
 $ git clone https://github.com/redhat-sa-brazil/demo-summitgov-cy20.git
 $ cd demo-summitgov-cy20
-$ kubectl apply -k _infra/application/demo-saude-digital-streams
-$ kubectl apply -k _infra/application/demo-saude-digital
+$ kubectl apply -k resources/application/demo-saude-digital-streams
+$ kubectl apply -k resources/application/demo-saude-digital
 
 ```
 
