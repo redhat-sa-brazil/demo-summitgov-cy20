@@ -29,7 +29,8 @@ metadata:
 spec:
   clusterSelector:
     matchLabels:
-      environment: development
+      environment: production
+      priority: secondary
   clusterReplicas: 1
 ---
 apiVersion: apps.open-cluster-management.io/v1
