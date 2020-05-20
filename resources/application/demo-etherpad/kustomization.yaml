@@ -1,0 +1,6 @@
+resources:
+- namespace.yaml
+- confimap.yaml
+- persistent-volume-claims.yaml
+- service.yaml
+- deployment.yaml
