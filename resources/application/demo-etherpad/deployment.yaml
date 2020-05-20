@@ -59,10 +59,10 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: demo-etherpad -data
+            claimName: demo-etherpad-data
         - name: cache
           persistentVolumeClaim:
-            claimName: demo-etherpad -cache
+            claimName: demo-etherpad-cache
         - name: config
           configMap:
             name: demo-etherpad -config
