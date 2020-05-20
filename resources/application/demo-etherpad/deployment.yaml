@@ -65,4 +65,4 @@ spec:
             claimName: demo-etherpad-cache
         - name: config
           configMap:
-            name: demo-etherpad -config
+            name: demo-etherpad-config
