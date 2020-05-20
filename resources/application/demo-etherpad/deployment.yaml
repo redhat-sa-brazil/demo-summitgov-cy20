@@ -1,0 +1,68 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: demo-etherpad
+  labels:
+    app.kubernetes.io/part-of: demo-etherpad
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: demo-etherpad 
+  template:
+    metadata:
+      labels:
+        app: demo-etherpad 
+    spec:
+      containers:
+        - name: etherpad
+          image: 'quay.io/davivcgarcia/ubi-etherpad'
+          ports:
+            - containerPort: 9001
+              protocol: TCP
+              name: http
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2"
+          volumeMounts:
+            - name: data
+              mountPath: /opt/etherpad/data
+            - name: cache
+              mountPath: /opt/etherpad/node_modules
+            - name: config
+              mountPath: /opt/etherpad/settings.json
+              subPath: settings.json
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 3
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            failureThreshold: 3
+            periodSeconds: 10
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: demo-etherpad -data
+        - name: cache
+          persistentVolumeClaim:
+            claimName: demo-etherpad -cache
+        - name: config
+          configMap:
+            name: demo-etherpad -config
