@@ -1,6 +1,5 @@
 resources:
 - namespace.yaml
 - configmap.yaml
-- persistent-volume-claims.yaml
 - service.yaml
 - deployment.yaml
