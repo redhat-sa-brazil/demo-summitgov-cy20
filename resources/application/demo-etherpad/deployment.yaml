@@ -58,11 +58,9 @@ spec:
             periodSeconds: 10
       volumes:
         - name: data
-          persistentVolumeClaim:
-            claimName: demo-etherpad-data
+          emptyDir: {}
         - name: cache
-          persistentVolumeClaim:
-            claimName: demo-etherpad-cache
+          emptyDir: {}
         - name: config
           configMap:
             name: demo-etherpad-config
