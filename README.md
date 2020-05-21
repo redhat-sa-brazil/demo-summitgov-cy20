@@ -73,7 +73,7 @@ $ kubectl apply -k resources/application/demo-saude-digital
 1. Criar projeto para configurar fluxos AMQ (Kafka)
 
 ```
-oc new-project streams
+oc new-project demo-saude-digital-streams
 
 ```
 
