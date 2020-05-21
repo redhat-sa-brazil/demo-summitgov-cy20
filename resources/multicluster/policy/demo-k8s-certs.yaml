@@ -1,0 +1,55 @@
+apiVersion: policy.mcm.ibm.com/v1alpha1
+kind: Policy
+metadata:
+  name: k8s-certificatepolicy
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.mcm.ibm.com/standards: HIPAA, FISMA
+    policy.mcm.ibm.com/categories: PR.DS DataSecurity
+    policy.mcm.ibm.com/controls: PR.DS-2 Data-in-transit
+spec:
+  complianceType: musthave
+  remediationAction: inform
+  disabled: false
+  namespaces:
+    exclude: ["kube-*"]
+    include: ["default"]
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policies.ibm.com/v1alpha1
+        kind: CertificatePolicy
+        metadata:
+          name: k8s-certificatepolicy-example
+        spec:
+          namespaceSelector:
+            include: ["default"]
+            exclude: []
+          remediationAction: inform
+          severity: low
+          minimumDuration: 300h
+---
+apiVersion: mcm.ibm.com/v1alpha1
+kind: PlacementBinding
+metadata:
+  name: binding-k8s-certificatepolicy
+  namespace: open-cluster-management-policies
+placementRef:
+  name: placement-k8s-certificatepolicy
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: k8s-certificatepolicy
+  kind: Policy
+  apiGroup: policy.mcm.ibm.com
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-k8s-certificatepolicy
+  namespace: open-cluster-management-policies
+spec:
+  clusterConditions:
+  - type: OK
+  clusterSelector:
+    matchExpressions:
+      - {key: vendor, operator: In, values: ["EKS", "GKE"]}
